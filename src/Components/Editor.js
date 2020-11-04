@@ -540,7 +540,8 @@ export class Editor extends React.Component {
                   {...this.props}
                   {...baseInputProps}
                   scrollEnabled={false}
-                  selection={this.state.selection}
+                  // FIXME: As of updating to React-Native 0.63.3, selection is broken on iOS too (https://github.com/facebook/react-native/issues/29063).
+                  // selection={this.state.selection}
                 />
               ) : (
                 <TextInput
