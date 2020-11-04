@@ -515,7 +515,6 @@ export class Editor extends React.Component {
       show: this.shouldMentionsShow(state, props),
     };
 
-    console.log(this.state);
     return (
       <View style={customStyles.container}>
         {this.shouldMentionsShow(state, props) ? (
