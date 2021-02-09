@@ -26,6 +26,7 @@ export class Editor extends React.Component {
 
     fetchingMentions: PropTypes.bool,
     horizontal: PropTypes.bool,
+    onInputRef: PropTypes.func,
     renderLeftView: PropTypes.func,
     renderMention: PropTypes.func,
     renderMentionList: PropTypes.func,
@@ -497,7 +498,7 @@ export class Editor extends React.Component {
     if (!props.showEditor) return null;
 
     const baseInputProps = {
-      ref: input => props.onRef && props.onRef(input),
+      ref: input => props.onInputRef && props.onInputRef(input),
       style: [styles.input, customStyles.input],
       multiline: true,
       value: state.inputText,
