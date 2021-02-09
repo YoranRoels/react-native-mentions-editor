@@ -14,7 +14,6 @@ export class Editor extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     initialValue: PropTypes.string,
-    clearInput: PropTypes.any,
     onChange: PropTypes.func,
     onChangeKeyword: PropTypes.func,
     showEditor: PropTypes.bool,
