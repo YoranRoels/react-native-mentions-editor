@@ -54,6 +54,8 @@ export class Editor extends React.Component {
   constructor(props) {
     super(props);
 
+    // Make 'addMention' available to outside components.
+    this.addMention = this.addMention.bind(this);
     this.mentionsMap = new Map();
     let msg = "";
     let formattedMsg = "";
@@ -250,7 +252,7 @@ export class Editor extends React.Component {
     };
   }
 
-  onSuggestionTap = user => {
+  addMention = user => {
     /**
      * When user taps a mention, add it to string and mention map.
      */
@@ -510,7 +512,7 @@ export class Editor extends React.Component {
       horizontal: props.horizontal,
       keyword: state.keyword,
       list: list,
-      onSuggestionTap: this.onSuggestionTap,
+      onSuggestionTap: this.addMention,
       renderMention: props.renderMention,
       show: this.shouldMentionsShow(state, props),
     };
