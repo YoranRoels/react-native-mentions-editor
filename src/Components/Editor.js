@@ -55,8 +55,10 @@ export class Editor extends React.Component {
   constructor(props) {
     super(props);
 
-    // Make 'addMention' available to outside components.
+    // Make 'addMention' & 'clearInput' available to outside components.
     this.addMention = this.addMention.bind(this);
+    this.clearInput = this.clearInput.bind(this);
+
     this.mentionsMap = new Map();
     let msg = "";
     let formattedMsg = "";
@@ -102,22 +104,6 @@ export class Editor extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Clear input when passing different 'clearInput' value.
-    if (
-      this.state.inputText !== "" &&
-      prevProps.clearInput !== this.props.clearInput
-    ) {
-      this.setState({
-        inputText: "",
-        formattedText: "",
-      });
-      this.mentionsMap.clear();
-      this.props.onChange({
-        displayText: "",
-        text: "",
-      });
-    }
-
     if (EU.whenTrue(this.props, prevProps, "showMentions")) {
       //don't need to close on false; user show select it.
       this.onChange(this.state.inputText, true);
@@ -251,6 +237,20 @@ export class Editor extends React.Component {
       initialStr,
       remStr,
     };
+  }
+
+  clearInput = (onDoneClearing = () => {}) => {
+    this.setState({
+      inputText: "",
+      formattedText: "",
+    }, () => {
+      this.mentionsMap.clear();
+      this.props.onChange({
+        displayText: "",
+        text: "",
+      });
+      onDoneClearing();
+    });
   }
 
   addMention = user => {
