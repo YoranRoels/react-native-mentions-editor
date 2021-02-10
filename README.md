@@ -4,14 +4,7 @@ Mentions TextInput for React Native. Tested on iOS and should work on Android as
 
 
 ## Installation
-
-```yarn add react-native-mentions-editor```
-or
-```npm install --save react-native-mentions-editor```
-
-```
-If you love this component, give a star, you will be a ray of sunshine :)
-```
+```"react-native-mentions-editor": "yambla/react-native-mention#master",```
 
 ## Demo
 
