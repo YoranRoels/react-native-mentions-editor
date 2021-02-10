@@ -14,7 +14,6 @@ export class Editor extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     initialValue: PropTypes.string,
-    clearInput: PropTypes.any,
     onChange: PropTypes.func,
     onChangeKeyword: PropTypes.func,
     showEditor: PropTypes.bool,
@@ -26,6 +25,7 @@ export class Editor extends React.Component {
 
     fetchingMentions: PropTypes.bool,
     horizontal: PropTypes.bool,
+    onInputRef: PropTypes.func,
     renderLeftView: PropTypes.func,
     renderMention: PropTypes.func,
     renderMentionList: PropTypes.func,
@@ -53,6 +53,10 @@ export class Editor extends React.Component {
 
   constructor(props) {
     super(props);
+
+    // Make 'addMention' & 'clearInput' available to outside components.
+    this.addMention = this.addMention.bind(this);
+    this.clearInput = this.clearInput.bind(this);
 
     this.mentionsMap = new Map();
     let msg = "";
@@ -99,22 +103,6 @@ export class Editor extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Clear input when passing different 'clearInput' value.
-    if (
-      this.state.inputText !== "" &&
-      prevProps.clearInput !== this.props.clearInput
-    ) {
-      this.setState({
-        inputText: "",
-        formattedText: "",
-      });
-      this.mentionsMap.clear();
-      this.props.onChange({
-        displayText: "",
-        text: "",
-      });
-    }
-
     if (EU.whenTrue(this.props, prevProps, "showMentions")) {
       //don't need to close on false; user show select it.
       this.onChange(this.state.inputText, true);
@@ -250,7 +238,21 @@ export class Editor extends React.Component {
     };
   }
 
-  onSuggestionTap = user => {
+  clearInput = (onDoneClearing = () => {}) => {
+    this.setState({
+      inputText: "",
+      formattedText: "",
+    }, () => {
+      this.mentionsMap.clear();
+      this.props.onChange({
+        displayText: "",
+        text: "",
+      });
+      onDoneClearing();
+    });
+  }
+
+  addMention = user => {
     /**
      * When user taps a mention, add it to string and mention map.
      */
@@ -495,7 +497,7 @@ export class Editor extends React.Component {
     if (!props.showEditor) return null;
 
     const baseInputProps = {
-      ref: input => props.onRef && props.onRef(input),
+      ref: input => props.onInputRef && props.onInputRef(input),
       style: [styles.input, customStyles.input],
       multiline: true,
       value: state.inputText,
@@ -510,7 +512,7 @@ export class Editor extends React.Component {
       horizontal: props.horizontal,
       keyword: state.keyword,
       list: list,
-      onSuggestionTap: this.onSuggestionTap,
+      onSuggestionTap: this.addMention,
       renderMention: props.renderMention,
       show: this.shouldMentionsShow(state, props),
     };
